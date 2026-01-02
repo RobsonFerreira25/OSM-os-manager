@@ -22,16 +22,25 @@ const menuItems = [
   { icon: Settings, label: 'Configurações', path: '/configuracoes' },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  isMobile?: boolean;
+}
+
+export function Sidebar({ isMobile = false }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
+
+  const isActuallyCollapsed = isMobile ? false : collapsed;
 
   return (
     <motion.aside
       initial={false}
-      animate={{ width: collapsed ? 72 : 260 }}
+      animate={{ width: isActuallyCollapsed ? 72 : 260 }}
       transition={{ duration: 0.2, ease: 'easeInOut' }}
-      className="fixed left-0 top-0 h-screen bg-sidebar flex flex-col z-50"
+      className={cn(
+        "bg-sidebar flex flex-col z-50 transition-all duration-200",
+        isMobile ? "h-full w-full" : "fixed left-0 top-0 h-screen"
+      )}
     >
       {/* Logo */}
       <div className="h-16 flex items-center px-4 border-b border-sidebar-border">
@@ -40,7 +49,7 @@ export function Sidebar() {
             <Wrench className="w-5 h-5 text-sidebar-primary-foreground" />
           </div>
           <AnimatePresence>
-            {!collapsed && (
+            {!isActuallyCollapsed && (
               <motion.div
                 initial={{ opacity: 0, width: 0 }}
                 animate={{ opacity: 1, width: 'auto' }}
@@ -75,7 +84,7 @@ export function Sidebar() {
             >
               <item.icon className="w-5 h-5 flex-shrink-0" />
               <AnimatePresence>
-                {!collapsed && (
+                {!isActuallyCollapsed && (
                   <motion.span
                     initial={{ opacity: 0, width: 0 }}
                     animate={{ opacity: 1, width: 'auto' }}
@@ -92,29 +101,31 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* Collapse Button */}
-      <div className="p-3 border-t border-sidebar-border">
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="sidebar-nav-item w-full justify-center"
-        >
-          {collapsed ? (
-            <ChevronRight className="w-5 h-5" />
-          ) : (
-            <>
-              <ChevronLeft className="w-5 h-5" />
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="whitespace-nowrap"
-              >
-                Recolher menu
-              </motion.span>
-            </>
-          )}
-        </button>
-      </div>
+      {/* Collapse Button (Only for Desktop) */}
+      {!isMobile && (
+        <div className="p-3 border-t border-sidebar-border">
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="sidebar-nav-item w-full justify-center"
+          >
+            {collapsed ? (
+              <ChevronRight className="w-5 h-5" />
+            ) : (
+              <>
+                <ChevronLeft className="w-5 h-5" />
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="whitespace-nowrap"
+                >
+                  Recolher menu
+                </motion.span>
+              </>
+            )}
+          </button>
+        </div>
+      )}
     </motion.aside>
   );
 }

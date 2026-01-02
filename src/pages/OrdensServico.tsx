@@ -139,8 +139,8 @@ export default function OrdensServico() {
       title="Ordens de Serviço"
       subtitle="Gerencie e acompanhe as solicitações de serviço"
     >
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <div className="relative flex-1">
+      <div className="flex flex-col gap-4 mb-6">
+        <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Buscar por número, descrição ou empresa..."
@@ -149,9 +149,9 @@ export default function OrdensServico() {
             className="pl-9"
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Filtrar por status" />
             </SelectTrigger>
             <SelectContent>
@@ -163,9 +163,9 @@ export default function OrdensServico() {
               ))}
             </SelectContent>
           </Select>
-          <Button className="gap-2" onClick={() => setIsCreateDialogOpen(true)}>
+          <Button className="flex-1 sm:flex-initial gap-2" onClick={() => setIsCreateDialogOpen(true)}>
             <Plus className="w-4 h-4" />
-            Nova OS
+            <span className="whitespace-nowrap">Nova OS</span>
           </Button>
         </div>
       </div>
@@ -174,96 +174,98 @@ export default function OrdensServico() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="table-container"
+        className="table-container overflow-x-auto rounded-xl border border-border/50"
       >
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Número / Empresa</TableHead>
-              <TableHead>Serviço</TableHead>
-              <TableHead>Abertura</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Prioridade</TableHead>
-              <TableHead className="w-[50px]"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
+        <div className="min-w-[800px] md:min-w-0">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-10">
-                  <div className="flex flex-col items-center gap-2">
-                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                    <p className="text-muted-foreground">Carregando ordens de serviço...</p>
-                  </div>
-                </TableCell>
+                <TableHead className="w-[150px] md:w-auto">Número / Empresa</TableHead>
+                <TableHead>Serviço</TableHead>
+                <TableHead className="hidden sm:table-cell">Abertura</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="hidden md:table-cell">Prioridade</TableHead>
+                <TableHead className="w-[50px]"></TableHead>
               </TableRow>
-            ) : filteredOS.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={6} className="text-center py-10">
-                  <p className="text-muted-foreground">Nenhuma ordem de serviço encontrada.</p>
-                </TableCell>
-              </TableRow>
-            ) : (
-              filteredOS.map((os) => (
-                <TableRow key={os.id}>
-                  <TableCell>
-                    <div>
-                      <p className="font-bold text-primary">{os.numero}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {(os.empresa as any)?.nome_fantasia || 'Empresa não identificada'}
-                      </p>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center py-10">
+                    <div className="flex flex-col items-center gap-2">
+                      <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                      <p className="text-muted-foreground">Carregando ordens de serviço...</p>
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="max-w-[200px]">
-                      <p className="font-medium truncate">{EspecialidadeLabels[os.tipoServico]}</p>
-                      <p className="text-sm text-muted-foreground truncate">
-                        {os.descricao}
-                      </p>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-sm">
-                    {format(new Date(os.dataAbertura), 'dd/MM/yyyy')}
-                  </TableCell>
-                  <TableCell>
-                    <Badge className={cn('status-badge', `status-${os.status}`)}>
-                      {StatusOSLabels[os.status]}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <div className={cn('w-2 h-2 rounded-full', `bg-priority-${os.prioridade}`)} />
-                      <span className="text-sm capitalize">{os.prioridade}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreHorizontal className="w-4 h-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => setViewingOS(os)}>
-                          <Eye className="w-4 h-4 mr-2" />
-                          Visualizar
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setEditingOS(os)}>
-                          <Edit className="w-4 h-4 mr-2" />
-                          Editar
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive" onClick={() => setDeletingOS(os)}>
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Excluir
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ) : filteredOS.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center py-10">
+                    <p className="text-muted-foreground">Nenhuma ordem de serviço encontrada.</p>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredOS.map((os) => (
+                  <TableRow key={os.id}>
+                    <TableCell>
+                      <div>
+                        <p className="font-bold text-primary">{os.numero}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {(os.empresa as any)?.nome_fantasia || 'Empresa não identificada'}
+                        </p>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="max-w-[200px]">
+                        <p className="font-medium truncate">{EspecialidadeLabels[os.tipoServico]}</p>
+                        <p className="text-sm text-muted-foreground truncate">
+                          {os.descricao}
+                        </p>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-sm hidden sm:table-cell">
+                      {format(new Date(os.dataAbertura), 'dd/MM/yyyy')}
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={cn('status-badge', `status-${os.status}`)}>
+                        {StatusOSLabels[os.status]}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      <div className="flex items-center gap-2">
+                        <div className={cn('w-2 h-2 rounded-full', `bg-priority-${os.prioridade}`)} />
+                        <span className="text-sm capitalize">{os.prioridade}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="w-4 h-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => setViewingOS(os)}>
+                            <Eye className="w-4 h-4 mr-2" />
+                            Visualizar
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setEditingOS(os)}>
+                            <Edit className="w-4 h-4 mr-2" />
+                            Editar
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-destructive" onClick={() => setDeletingOS(os)}>
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Excluir
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </motion.div>
 
       {/* CREATE DIALOG */}

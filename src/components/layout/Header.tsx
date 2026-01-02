@@ -1,4 +1,4 @@
-import { Bell, Search, User, LogOut } from 'lucide-react';
+import { Bell, Search, User, LogOut, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -12,6 +12,8 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useAuth } from '@/components/auth-provider';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sidebar } from './Sidebar';
 
 interface HeaderProps {
   title: string;
@@ -24,12 +26,29 @@ export function Header({ title, subtitle }: HeaderProps) {
   const userName = user?.email?.split('@')[0] || 'Usuário';
 
   return (
-    <header className="h-16 bg-card border-b border-border flex items-center justify-between px-6">
-      <div>
-        <h1 className="text-xl font-semibold text-foreground">{title}</h1>
-        {subtitle && (
-          <p className="text-sm text-muted-foreground">{subtitle}</p>
-        )}
+    <header className="h-16 bg-card border-b border-border flex items-center justify-between px-4 md:px-6">
+      <div className="flex items-center gap-3">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" className="md:hidden">
+              <Menu className="w-5 h-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="p-0 w-[260px] bg-sidebar border-r-sidebar-border">
+            <Sidebar isMobile />
+          </SheetContent>
+        </Sheet>
+
+        <div>
+          <h1 className="text-lg md:text-xl font-semibold text-foreground truncate max-w-[150px] md:max-w-none">
+            {title}
+          </h1>
+          {subtitle && (
+            <p className="text-xs md:text-sm text-muted-foreground truncate hidden sm:block">
+              {subtitle}
+            </p>
+          )}
+        </div>
       </div>
 
       <div className="flex items-center gap-4">

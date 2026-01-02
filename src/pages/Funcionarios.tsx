@@ -182,8 +182,8 @@ export default function Funcionarios() {
       title="Funcionários"
       subtitle="Gerencie os funcionários da empresa"
     >
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <div className="relative flex-1">
+      <div className="flex flex-col gap-4 mb-6">
+        <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Buscar por nome ou matrícula..."
@@ -200,12 +200,12 @@ export default function Funcionarios() {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="gap-2">
+            <Button className="w-full sm:w-auto gap-2">
               <Plus className="w-4 h-4" />
               Novo Funcionário
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingFunc ? 'Editar Funcionário' : 'Cadastrar Novo Funcionário'}</DialogTitle>
               <DialogDescription>
@@ -301,84 +301,86 @@ export default function Funcionarios() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="table-container"
+        className="table-container overflow-x-auto rounded-xl border border-border/50"
       >
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center p-12 gap-4">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            <p className="text-muted-foreground">Carregando...</p>
-          </div>
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Funcionário</TableHead>
-                <TableHead>Matrícula</TableHead>
-                <TableHead>Cargo</TableHead>
-                <TableHead>Especialidades</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredFuncionarios.map((funcionario) => (
-                <TableRow key={funcionario.id}>
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                        <User className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium">{funcionario.nome}</p>
-                        <p className="text-sm text-muted-foreground">{funcionario.email}</p>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="font-mono text-sm">{funcionario.matricula}</TableCell>
-                  <TableCell>{CargoNivelLabels[funcionario.cargo as keyof typeof CargoNivelLabels]}</TableCell>
-                  <TableCell>
-                    <div className="flex flex-wrap gap-1">
-                      {funcionario.especialidades.slice(0, 2).map((esp) => (
-                        <Badge key={esp} variant="secondary" className="text-xs">
-                          {EspecialidadeLabels[esp as keyof typeof EspecialidadeLabels]}
-                        </Badge>
-                      ))}
-                      {funcionario.especialidades.length > 2 && (
-                        <Badge variant="secondary" className="text-xs">
-                          +{funcionario.especialidades.length - 2}
-                        </Badge>
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge className={cn('status-badge', funcionario.status === 'ativo' ? 'bg-success/10 text-success' : 'bg-muted text-muted-foreground')}>
-                      {funcionario.status === 'ativo' ? 'Ativo' : 'Inativo'}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreHorizontal className="w-4 h-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleEdit(funcionario)}>
-                          <Edit className="w-4 h-4 mr-2" />
-                          Editar
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive" onClick={() => setDeletingFunc(funcionario)}>
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Excluir
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+        <div className="min-w-[800px] md:min-w-0">
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center p-12 gap-4">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              <p className="text-muted-foreground">Carregando...</p>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[250px] md:w-auto">Funcionário</TableHead>
+                  <TableHead className="hidden sm:table-cell">Matrícula</TableHead>
+                  <TableHead>Cargo</TableHead>
+                  <TableHead className="hidden md:table-cell">Especialidades</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="w-[50px]"></TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
+              </TableHeader>
+              <TableBody>
+                {filteredFuncionarios.map((funcionario) => (
+                  <TableRow key={funcionario.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                          <User className="w-5 h-5 text-primary" />
+                        </div>
+                        <div>
+                          <p className="font-medium">{funcionario.nome}</p>
+                          <p className="text-sm text-muted-foreground">{funcionario.email}</p>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="font-mono text-sm hidden sm:table-cell">{funcionario.matricula}</TableCell>
+                    <TableCell>{CargoNivelLabels[funcionario.cargo as keyof typeof CargoNivelLabels]}</TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      <div className="flex flex-wrap gap-1">
+                        {funcionario.especialidades.slice(0, 2).map((esp) => (
+                          <Badge key={esp} variant="secondary" className="text-xs">
+                            {EspecialidadeLabels[esp as keyof typeof EspecialidadeLabels]}
+                          </Badge>
+                        ))}
+                        {funcionario.especialidades.length > 2 && (
+                          <Badge variant="secondary" className="text-xs">
+                            +{funcionario.especialidades.length - 2}
+                          </Badge>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={cn('status-badge', funcionario.status === 'ativo' ? 'bg-success/10 text-success' : 'bg-muted text-muted-foreground')}>
+                        {funcionario.status === 'ativo' ? 'Ativo' : 'Inativo'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="w-4 h-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => handleEdit(funcionario)}>
+                            <Edit className="w-4 h-4 mr-2" />
+                            Editar
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-destructive" onClick={() => setDeletingFunc(funcionario)}>
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Excluir
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </div>
       </motion.div>
 
       <AlertDialog open={!!deletingFunc} onOpenChange={(open) => !open && setDeletingFunc(null)}>
