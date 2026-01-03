@@ -71,6 +71,11 @@ export default function Funcionarios() {
   const [cargo, setCargo] = useState<CargoNivel | ''>('');
   const [status, setStatus] = useState<'ativo' | 'inativo'>('ativo');
   const [dataAdmissao, setDataAdmissao] = useState('');
+  const [nome, setNome] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [matricula, setMatricula] = useState('');
+  const [email, setEmail] = useState('');
+  const [telefone, setTelefone] = useState('');
 
   const queryClient = useQueryClient();
 
@@ -133,6 +138,11 @@ export default function Funcionarios() {
     setCargo('');
     setStatus('ativo');
     setDataAdmissao('');
+    setNome('');
+    setCpf('');
+    setMatricula('');
+    setEmail('');
+    setTelefone('');
   };
 
   // Delete Mutation
@@ -164,15 +174,13 @@ export default function Funcionarios() {
       return;
     }
 
-    const formData = new FormData(e.currentTarget);
-
     const payload = {
-      nome: formData.get('nome'),
-      cpf: formData.get('cpf'),
-      matricula: formData.get('matricula'),
+      nome: nome,
+      cpf: cpf,
+      matricula: matricula,
       cargo: cargo,
-      email: formData.get('email'),
-      telefone: formData.get('telefone'),
+      email: email,
+      telefone: telefone,
       status: status,
       especialidades: selectedSpecs,
       data_admissao: dataAdmissao || null,
@@ -187,6 +195,11 @@ export default function Funcionarios() {
     setCargo(f.cargo);
     setStatus(f.status);
     setDataAdmissao(f.dataAdmissao || '');
+    setNome(f.nome || '');
+    setCpf(f.cpf || '');
+    setMatricula(f.matricula || '');
+    setEmail(f.email || '');
+    setTelefone(f.telefone || '');
     setIsDialogOpen(true);
   };
 
@@ -238,15 +251,30 @@ export default function Funcionarios() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="nome">Nome Completo *</Label>
-                  <Input name="nome" id="nome" defaultValue={editingFunc?.nome} required />
+                  <Input
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    id="nome"
+                    required
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="cpf">CPF *</Label>
-                  <Input name="cpf" id="cpf" defaultValue={editingFunc?.cpf} required />
+                  <Input
+                    value={cpf}
+                    onChange={(e) => setCpf(e.target.value)}
+                    id="cpf"
+                    required
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="matricula">Matrícula *</Label>
-                  <Input name="matricula" id="matricula" defaultValue={editingFunc?.matricula} required />
+                  <Input
+                    value={matricula}
+                    onChange={(e) => setMatricula(e.target.value)}
+                    id="matricula"
+                    required
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="cargo">Cargo *</Label>
@@ -265,11 +293,20 @@ export default function Funcionarios() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">E-mail</Label>
-                  <Input name="email" id="email" type="email" defaultValue={editingFunc?.email} />
+                  <Input
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    id="email"
+                    type="email"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="telefone">Telefone</Label>
-                  <Input name="telefone" id="telefone" defaultValue={editingFunc?.telefone} />
+                  <Input
+                    value={telefone}
+                    onChange={(e) => setTelefone(e.target.value)}
+                    id="telefone"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="data_admissao">Data de Admissão</Label>
