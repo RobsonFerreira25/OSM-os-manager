@@ -30,7 +30,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { CargoNivelLabels, EspecialidadeLabels, Especialidade, Funcionario } from '@/types';
+import { CargoNivelLabels, EspecialidadeLabels, Especialidade, Funcionario, CargoNivel } from '@/types';
 import { Plus, Search, Edit, Trash2, User, MoreHorizontal, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -68,6 +68,9 @@ export default function Funcionarios() {
   const [editingFunc, setEditingFunc] = useState<Funcionario | null>(null);
   const [deletingFunc, setDeletingFunc] = useState<Funcionario | null>(null);
   const [selectedSpecs, setSelectedSpecs] = useState<Especialidade[]>([]);
+  const [cargo, setCargo] = useState<CargoNivel | ''>('');
+  const [status, setStatus] = useState<'ativo' | 'inativo'>('ativo');
+  const [dataAdmissao, setDataAdmissao] = useState('');
 
   const queryClient = useQueryClient();
 
@@ -101,15 +104,15 @@ export default function Funcionarios() {
 
   // Save Mutation
   const saveMutation = useMutation({
-    mutationFn: async (func: any) => {
+    mutationFn: async (payload: any) => {
       if (editingFunc) {
         const { error } = await supabase
           .from('funcionarios')
-          .update(func)
+          .update(payload)
           .eq('id', editingFunc.id);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from('funcionarios').insert([func]);
+        const { error } = await supabase.from('funcionarios').insert([payload]);
         if (error) throw error;
       }
     },
@@ -117,13 +120,20 @@ export default function Funcionarios() {
       queryClient.invalidateQueries({ queryKey: ['funcionarios'] });
       toast.success(editingFunc ? 'Funcionário atualizado!' : 'Funcionário cadastrado!');
       setIsDialogOpen(false);
-      setEditingFunc(null);
-      setSelectedSpecs([]);
+      resetForm();
     },
     onError: (error: any) => {
       toast.error('Erro ao salvar funcionário', { description: error.message });
     },
   });
+
+  const resetForm = () => {
+    setEditingFunc(null);
+    setSelectedSpecs([]);
+    setCargo('');
+    setStatus('ativo');
+    setDataAdmissao('');
+  };
 
   // Delete Mutation
   const deleteMutation = useMutation({
@@ -143,17 +153,29 @@ export default function Funcionarios() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!cargo) {
+      toast.error('Cargo é obrigatório');
+      return;
+    }
+
+    if (selectedSpecs.length === 0) {
+      toast.error('Selecione pelo menos uma especialidade');
+      return;
+    }
+
     const formData = new FormData(e.currentTarget);
 
     const payload = {
       nome: formData.get('nome'),
       cpf: formData.get('cpf'),
       matricula: formData.get('matricula'),
-      cargo: formData.get('cargo'),
+      cargo: cargo,
       email: formData.get('email'),
       telefone: formData.get('telefone'),
-      status: formData.get('status') || 'ativo',
+      status: status,
       especialidades: selectedSpecs,
+      data_admissao: dataAdmissao || null,
     };
 
     saveMutation.mutate(payload);
@@ -162,6 +184,9 @@ export default function Funcionarios() {
   const handleEdit = (f: Funcionario) => {
     setEditingFunc(f);
     setSelectedSpecs(f.especialidades);
+    setCargo(f.cargo);
+    setStatus(f.status);
+    setDataAdmissao(f.dataAdmissao || '');
     setIsDialogOpen(true);
   };
 
@@ -194,10 +219,7 @@ export default function Funcionarios() {
         </div>
         <Dialog open={isDialogOpen} onOpenChange={(open) => {
           setIsDialogOpen(open);
-          if (!open) {
-            setEditingFunc(null);
-            setSelectedSpecs([]);
-          }
+          if (!open) resetForm();
         }}>
           <DialogTrigger asChild>
             <Button className="w-full sm:w-auto gap-2">
@@ -228,7 +250,7 @@ export default function Funcionarios() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="cargo">Cargo *</Label>
-                  <Select name="cargo" defaultValue={editingFunc?.cargo}>
+                  <Select value={cargo} onValueChange={(v) => setCargo(v as CargoNivel)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione o cargo" />
                     </SelectTrigger>
@@ -249,10 +271,19 @@ export default function Funcionarios() {
                   <Label htmlFor="telefone">Telefone</Label>
                   <Input name="telefone" id="telefone" defaultValue={editingFunc?.telefone} />
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="data_admissao">Data de Admissão</Label>
+                  <Input
+                    type="date"
+                    id="data_admissao"
+                    value={dataAdmissao}
+                    onChange={(e) => setDataAdmissao(e.target.value)}
+                  />
+                </div>
                 {editingFunc && (
                   <div className="space-y-2">
                     <Label htmlFor="status">Status</Label>
-                    <Select name="status" defaultValue={editingFunc.status}>
+                    <Select value={status} onValueChange={(v) => setStatus(v as 'ativo' | 'inativo')}>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione o status" />
                       </SelectTrigger>
