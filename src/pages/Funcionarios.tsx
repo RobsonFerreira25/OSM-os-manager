@@ -77,10 +77,12 @@ export default function Funcionarios() {
   const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');
 
+  const [lastUpdate, setLastUpdate] = useState<string>('');
+
   const queryClient = useQueryClient();
 
   // Fetch Employees
-  const { data: funcionarios = [], isLoading } = useQuery({
+  const { data: funcionarios = [], isLoading, refetch } = useQuery({
     queryKey: ['funcionarios'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -89,6 +91,8 @@ export default function Funcionarios() {
         .order('nome', { ascending: true });
 
       if (error) throw error;
+
+      setLastUpdate(new Date().toLocaleTimeString());
 
       return (data as any[]).map(f => ({
         id: f.id,
@@ -105,27 +109,34 @@ export default function Funcionarios() {
         updatedAt: f.updated_at,
       })) as Funcionario[];
     },
+    staleTime: 0,
   });
 
   // Save Mutation
   const saveMutation = useMutation({
     mutationFn: async (payload: any) => {
       if (editingFunc) {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('funcionarios')
           .update(payload)
-          .eq('id', editingFunc.id);
+          .eq('id', editingFunc.id)
+          .select();
         if (error) throw error;
+        return data;
       } else {
-        const { error } = await supabase.from('funcionarios').insert([payload]);
+        const { data, error } = await supabase.from('funcionarios').insert([payload]).select();
         if (error) throw error;
+        return data;
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['funcionarios'] });
       toast.success(editingFunc ? 'Funcionário atualizado!' : 'Funcionário cadastrado!');
       setIsDialogOpen(false);
       resetForm();
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['funcionarios'] });
+      refetch();
     },
     onError: (error: any) => {
       toast.error('Erro ao salvar funcionário', { description: error.message });
@@ -218,7 +229,7 @@ export default function Funcionarios() {
   return (
     <MainLayout
       title="Funcionários"
-      subtitle="Gerencie os funcionários da empresa"
+      subtitle={`Gerencie os funcionários da empresa ${lastUpdate ? `• Atualizado às ${lastUpdate}` : ''}`}
     >
       <div className="flex flex-col gap-4 mb-6">
         <div className="relative w-full">
