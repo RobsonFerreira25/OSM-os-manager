@@ -47,26 +47,28 @@ export function ServiceOrderPrint({ os }: ServiceOrderPrintProps) {
                     </div>
                     <div className="border-r-2 border-black p-1">
                         <div className="text-[7pt] uppercase text-gray-600">Cidade</div>
-                        <div className="h-4">{empresa.cidade}</div>
+                        <div className="h-4">{empresa.endereco?.cidade}</div>
                     </div>
                     <div className="p-1">
                         <div className="text-[7pt] uppercase text-gray-600">Estado</div>
-                        <div className="h-4">{empresa.uf || empresa.estado}</div>
+                        <div className="h-4">{empresa.endereco?.estado || empresa.uf}</div>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-4 border-b-2 border-black">
                     <div className="col-span-2 border-r-2 border-black p-1">
                         <div className="text-[7pt] uppercase text-gray-600">Endereço</div>
-                        <div className="h-4">{empresa.endereco}</div>
+                        <div className="h-4">
+                            {empresa.endereco ? `${empresa.endereco.logradouro}, ${empresa.endereco.numero}${empresa.endereco.complemento ? ` - ${empresa.endereco.complemento}` : ''} - ${empresa.endereco.bairro}` : ''}
+                        </div>
                     </div>
                     <div className="border-r-2 border-black p-1">
                         <div className="text-[7pt] uppercase text-gray-600">Contato</div>
-                        <div className="h-4">{empresa.contato}</div>
+                        <div className="h-4">{empresa.contato_responsavel?.nome}</div>
                     </div>
                     <div className="p-1">
                         <div className="text-[7pt] uppercase text-gray-600">Telefone</div>
-                        <div className="h-4">{empresa.telefone}</div>
+                        <div className="h-4">{empresa.contato_responsavel?.telefone}</div>
                     </div>
                 </div>
 

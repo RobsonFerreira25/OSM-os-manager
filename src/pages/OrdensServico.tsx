@@ -70,7 +70,7 @@ export default function OrdensServico() {
         .from('ordens_servico')
         .select(`
           *,
-          empresa:empresas(id, nome_fantasia, cidade, uf, endereco, contato, telefone),
+          empresa:empresas(id, nome_fantasia, endereco, contato_responsavel),
           funcionarios:ordens_servico_funcionarios(
             funcionario:funcionarios(*)
           )
