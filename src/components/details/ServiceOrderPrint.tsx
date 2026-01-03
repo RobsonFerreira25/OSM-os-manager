@@ -23,6 +23,9 @@ export function ServiceOrderPrint({ os }: ServiceOrderPrintProps) {
                     </div>
                     <div className="w-2/4 text-center">
                         <h1 className="text-xl font-bold uppercase">Ordem de Serviço</h1>
+                        <div className="text-sm font-bold text-gray-700 mt-1">
+                            Cliente: {empresa.nome_fantasia || empresa.nome}
+                        </div>
                     </div>
                     <div className="w-1/4 text-right border-l-2 border-black pl-2">
                         <div className="text-[8pt] uppercase">Nº Formulário</div>
@@ -30,9 +33,9 @@ export function ServiceOrderPrint({ os }: ServiceOrderPrintProps) {
                     </div>
                 </div>
 
-                {/* Subheader Address */}
-                <div className="bg-gray-200 text-center py-1 border-b-2 border-black text-[7pt] font-semibold">
-                    bracta - Av. Paulista, 568 - 1º andar - Bela Vista - São Paulo / SP - CEP: 01310-000  C.N.P.J. 03.525.119/0001-76
+                {/* Subheader Address (Removed fixed address, kept only brand/CNPJ info if needed, or cleared) */}
+                <div className="bg-gray-200 text-center py-1 border-b-2 border-black text-[7pt] font-semibold uppercase">
+                    bracta - C.N.P.J. 03.525.119/0001-76
                 </div>
 
                 {/* Customer Info */}
