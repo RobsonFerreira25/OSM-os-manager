@@ -70,7 +70,7 @@ export default function OrdensServico() {
         .from('ordens_servico')
         .select(`
           *,
-          empresa:empresas(id, nome_fantasia),
+          empresa:empresas(id, nome_fantasia, cidade, uf, endereco, contato, telefone),
           funcionarios:ordens_servico_funcionarios(
             funcionario:funcionarios(*)
           )
@@ -183,6 +183,7 @@ export default function OrdensServico() {
                 <TableHead className="w-[150px] md:w-auto">Número / Empresa</TableHead>
                 <TableHead>Serviço</TableHead>
                 <TableHead className="hidden sm:table-cell">Abertura</TableHead>
+                <TableHead className="hidden lg:table-cell">Conclusão</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="hidden md:table-cell">Prioridade</TableHead>
                 <TableHead className="w-[50px]"></TableHead>
@@ -225,6 +226,9 @@ export default function OrdensServico() {
                     </TableCell>
                     <TableCell className="text-sm hidden sm:table-cell">
                       {format(new Date(os.dataAbertura), 'dd/MM/yyyy')}
+                    </TableCell>
+                    <TableCell className="text-sm hidden lg:table-cell">
+                      {os.dataRealConclusao ? format(new Date(os.dataRealConclusao), 'dd/MM/yyyy') : '-'}
                     </TableCell>
                     <TableCell>
                       <Badge className={cn('status-badge', `status-${os.status}`)}>

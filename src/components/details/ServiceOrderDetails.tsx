@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
+import { ServiceOrderPrint } from "./ServiceOrderPrint";
 
 interface ServiceOrderDetailsProps {
     os: any;
@@ -142,6 +143,16 @@ export function ServiceOrderDetails({ os, onUpdate }: ServiceOrderDetailsProps) 
                             </p>
                         </div>
                     )}
+                    {(os.data_real_conclusao || os.dataRealConclusao) && (
+                        <div>
+                            <h4 className="text-sm font-medium text-muted-foreground mb-1">Data Conclusão</h4>
+                            <p className="font-medium">
+                                {format(new Date(os.data_real_conclusao || os.dataRealConclusao), "dd/MM/yyyy 'às' HH:mm", {
+                                    locale: ptBR,
+                                })}
+                            </p>
+                        </div>
+                    )}
                 </div>
 
                 <div>
@@ -191,6 +202,8 @@ export function ServiceOrderDetails({ os, onUpdate }: ServiceOrderDetailsProps) 
                     Imprimir PDF
                 </Button>
             </div>
+
+            <ServiceOrderPrint os={os} />
         </div>
     );
 }
