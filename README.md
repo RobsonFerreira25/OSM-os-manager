@@ -1,73 +1,116 @@
-# Welcome to your Lovable project
+# 🛠️ OSM - Gestor de Ordens de Serviço
 
-## Project info
+![Dashboard Cover](public/screenshots/dashboard.png)
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## 📌 Sobre o Projeto
 
-## How can I edit this code?
+O **OSM (Order Service Manager)** é uma solução robusta e moderna para a gestão completa de ordens de serviço, empresas parceiras e colaboradores. Desenvolvido com foco na experiência do usuário (UX) e eficiência operacional, o sistema permite o acompanhamento em tempo real do status das atividades, gestão de especialidades e visualização analítica através de dashboards intuitivos.
 
-There are several ways of editing your application.
+Este projeto foi construído utilizando as tecnologias mais modernas do ecossistema React, garantindo alta performance, escalabilidade e uma interface extremamente refinada.
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## 📸 Demonstração
 
-Changes made via Lovable will be committed automatically to this repo.
+### Visão Geral (Dashboard)
 
-**Use your preferred IDE**
+Painel administrativo com métricas cruciais para a tomada de decisão.
+![Dashboard](public/screenshots/dashboard.png)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Gestão de Ordens de Serviço
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Interface dinâmica para criação, edição e acompanhamento de fluxos de trabalho.
+![Ordens de Serviço](public/screenshots/ordens_servico.png)
 
-Follow these steps:
+### Controle de Colaboradores & Empresas
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Gestão centralizada de talentos e parceiros comerciais.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+| Funcionários | Empresas |
+| :---: | :---: |
+| ![Funcionários](public/screenshots/funcionarios.png) | ![Empresas](public/screenshots/empresas.png) |
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+## 🚀 Principais Funcionalidades
+
+- **📊 Dashboard Inteligente**: Visualização de métricas de OS, status de execução e produtividade.
+- **📝 Gestão de OS**: Fluxo completo de ordens de serviço com atribuição de responsáveis e prazos.
+- **👥 Cadastro de Colaboradores**: Controle de especialidades, cargos e status operacional.
+- **🏢 Gestão de Empresas**: Base de dados de parceiros e clientes.
+- **⚙️ Configurações Customizáveis**: Ajustes de perfil e preferências do sistema.
+- **🔐 Autenticação Segura**: Fluxo de login integrado via Supabase.
+
+---
+
+## 🛠️ Stack Tecnológica
+
+- **Frontend**: [React](https://reactjs.org/) + [TypeScript](https://www.typescriptlang.org/)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Estilização**: [Tailwind CSS](https://tailwindcss.com/)
+- **Componentes UI**: [Shadcn/UI](https://ui.shadcn.com/) + [Radix UI](https://www.radix-ui.com/)
+- **Backend & Auth**: [Supabase](https://supabase.com/)
+- **Gerenciamento de Estado**: [TanStack Query (React Query)](https://tanstack.com/query/latest)
+- **Formulários**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
+- **Animações**: [Framer Motion](https://www.framer.com/motion/)
+- **Gráficos**: [Recharts](https://recharts.org/)
+
+---
+
+## 📦 Como Executar o Projeto
+
+1. **Clone o repositório:**
+
+   ```bash
+   git clone https://github.com/seu-usuario/OSM-os-manager.git
+   cd OSM-os-manager
+   ```
+
+2. **Instale as dependências:**
+
+   ```bash
+   npm install
+   ```
+
+3. **Configure as variáveis de ambiente:**
+   Crie um arquivo `.env` na raiz do projeto com suas credenciais do Supabase:
+
+   ```env
+   VITE_SUPABASE_URL=sua_url_do_supabase
+   VITE_SUPABASE_ANON_KEY=sua_chave_anon_do_supabase
+   ```
+
+4. **Inicie o servidor de desenvolvimento:**
+
+   ```bash
+   npm run dev
+   ```
+
+   Acesse: `http://localhost:8080`
+
+---
+
+## 📂 Estrutura de Pastas
+
+```
+src/
+├── components/   # Componentes reutilizáveis (UI & Layout)
+├── data/         # Mock data e constantes
+├── hooks/        # Hooks customizados
+├── lib/          # Configurações de bibliotecas (Supabase, Utils)
+├── pages/        # Telas principais da aplicação
+├── types/        # Definições de tipos TypeScript
+└── App.tsx       # Configuração de rotas e providers
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📝 Licença
 
-**Use GitHub Codespaces**
+Este projeto está sob a licença [MIT](LICENSE).
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+<p align="center">
+  Desenvolvido com ❤️ por <strong>Robson Ferreira</strong>
+</p>
