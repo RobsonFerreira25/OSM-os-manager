@@ -43,26 +43,24 @@ export function Sidebar({ isMobile = false }: SidebarProps) {
       )}
     >
       {/* Logo */}
-      <div className="h-16 flex items-center px-4 border-b border-sidebar-border">
+      <div className="h-20 flex items-center px-4 border-b border-sidebar-border/50">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-sidebar-primary flex items-center justify-center flex-shrink-0">
-            <Wrench className="w-5 h-5 text-sidebar-primary-foreground" />
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-900/20">
+            <span className="text-white font-black text-xl tracking-tighter">OSM</span>
           </div>
           <AnimatePresence>
             {!isActuallyCollapsed && (
               <motion.div
-                initial={{ opacity: 0, width: 0 }}
-                animate={{ opacity: 1, width: 'auto' }}
-                exit={{ opacity: 0, width: 0 }}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
                 transition={{ duration: 0.2 }}
                 className="overflow-hidden"
               >
-                <h1 className="font-bold text-lg text-sidebar-foreground whitespace-nowrap">
+                <h1 className="font-extrabold text-xl tracking-tight text-white whitespace-nowrap">
                   OS Manager
                 </h1>
-                <p className="text-xs text-sidebar-foreground/60 whitespace-nowrap">
-                  Gestão de Ordens
-                </p>
+                <div className="h-1 w-8 bg-blue-500 rounded-full mt-0.5" />
               </motion.div>
             )}
           </AnimatePresence>

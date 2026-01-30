@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 150">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#2563EB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1D4ED8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="150" height="150" rx="30" fill="url(#grad1)" />
+  <text x="75" y="110" font-family="Arial, sans-serif" font-weight="900" font-size="100" text-anchor="middle" fill="white">O</text>
+  <text x="170" y="110" font-family="Arial, sans-serif" font-weight="bold" font-size="80" fill="#1e293b">SM</text>
+  <text x="175" y="140" font-family="Arial, sans-serif" font-size="24" fill="#64748b" letter-spacing="2">MANAGER</text>
+</svg>
